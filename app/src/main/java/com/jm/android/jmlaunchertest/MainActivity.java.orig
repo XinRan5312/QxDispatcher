@@ -1,0 +1,144 @@
+package com.jm.android.jmlaunchertest;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+
+import com.jm.android.jmlauncher.dispatcher.constants.JMCommonAppConstants;
+import com.jm.android.jmlauncher.dispatcher.entry.JMCommonDispatcherManager;
+import com.jm.android.jmlauncher.dispatcher.modle.JMCommonIBaseDispatcher;
+import com.jm.android.jmlauncher.dispatcher.modle.JMCommonUrlItem;
+import com.jm.android.jmlauncher.initializer.annonation.JMAsync;
+import com.jm.android.jmlauncher.initializer.annonation.JMPriviority;
+import com.jm.android.jmlauncher.initializer.annonation.JMSync;
+import com.jm.android.jmlauncher.initializer.annonation.eJMPriviority;
+import com.jm.android.jmlauncher.initializer.utils.JMInitializer;
+import com.jm.android.jmlaunchertest.dispatchertest.JMSchemaDealHome;
+import com.jm.android.jmlaunchertest.dispatchertest.TestConstants;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by qixinh on 16/3/11.
+ */
+public class MainActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);
+        Button btn = (Button) findViewById(R.id.btn_dispatcher);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //网略 真正开始的时候要在Application请求
+
+                JMCommonDispatcherManager dispatcher = JMCommonDispatcherManager.newInstance(MainActivity.this);
+
+                JMCommonIBaseDispatcher baseDispatcher = new JMSchemaDealHome(MainActivity.this);
+
+                dispatcher.registerSubmoduleDispatcher(JMCommonAppConstants.HOME_MODULE_NAME, baseDispatcher);
+                JMCommonUrlItem item = new JMCommonUrlItem();
+                item.key = "jack";
+                item.uri = "jm://three/w";
+                List<JMCommonUrlItem> list = new ArrayList<JMCommonUrlItem>();
+                list.add(item);
+                dispatcher.initUrlsMapFromNet(list);
+                Bundle b = new Bundle();
+                b.putString(TestConstants.TEST_BUNDLE,"test Bundle Ok");
+                dispatcher.dispacherTo(JMCommonAppConstants.HOME_MODULE_NAME, "jack",b);
+//                dispatcher.dispatcherRequest(Uri.parse(ul));
+
+                //测试直接跳转本地配置scheme data
+//                JMCommonSendScheme.sendScheme(MainActivity.this, "jm://home/post");
+            }
+        });
+
+        Button btn2 = (Button) findViewById(R.id.btn_dispatcher2);
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //自己注册 真正开始的时候要在Application注册
+
+                JMCommonDispatcherManager dispatcher = JMCommonDispatcherManager.newInstance(MainActivity.this);
+                JMCommonIBaseDispatcher baseDispatcher = new JMSchemaDealHome(MainActivity.this);
+
+                dispatcher.registerSubmoduleDispatcher("home", baseDispatcher);
+                String ul = "jm://home/w?module=main";
+//                dispatcher.dispatcherRequest(Uri.parse(ul));
+
+                //测试直接跳转本地配置scheme data
+//                JMCommonSendScheme.sendSchemeAddMediaStack(MainActivity.this, "jm://home/post","jm://three/w");
+            }
+        });
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @JMSync
+    public void testSync(){
+        Log.i("testff","I am a test!GO GO GO   333333"+this.getClass().getSimpleName());
+    }
+
+    @JMSync
+    @JMPriviority(eJMPriviority.ePriviorityHigh)
+    public void testSyncHigh(){
+        Log.i("testff","I am a test!ePriviorityHigh 555555"+this.getClass().getSimpleName());
+    }
+    @JMSync
+    @JMPriviority(eJMPriviority.ePriviorityNormal)
+    public void testSyncNor(){
+        Log.i("testff","I am a test!ePriviorityNormal 44444"+this.getClass().getSimpleName());
+    }
+    @JMSync
+    @JMPriviority(eJMPriviority.ePriviorityLow)
+    public void testSyncLow(){
+        Log.i("testff","I am a test!ePriviorityLow   333333"+this.getClass().getSimpleName());
+    }
+
+    @JMAsync
+    public void testAsync1(){
+        Log.i("testff","I am a test!testAsync1    000000"+this.getClass().getSimpleName());
+    }
+
+    @JMAsync
+    public void testAsync2(){
+        Log.i("testff","I am a test!testAsync2    000000"+this.getClass().getSimpleName());
+    }
+    @JMAsync
+    public void testAsync3(){
+        Log.i("testff","I am a test!testAsync3    000000"+this.getClass().getSimpleName());
+    }
+}

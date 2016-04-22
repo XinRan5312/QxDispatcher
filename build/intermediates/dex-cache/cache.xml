@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/xinran/workspace/JM/mobile_android_jmlauncher/app/build/intermediates/exploded-aar/mobile_android_jmlauncher/jmlauncher/unspecified/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="e72d70c1acef0abce708367e2e04be292be037c4">
+        <dex dex="/Users/xinran/workspace/JM/mobile_android_jmlauncher/app/build/intermediates/pre-dexed/debug/mobile_android_jmlauncher-jmlauncher-unspecified_b3931cfae7520a2e136842fdc5e1186bd9a53895.jar" />
+    </item>
+
+</items>

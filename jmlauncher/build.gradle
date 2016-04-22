@@ -1,0 +1,45 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+}
+
+
+uploadArchives {
+    repositories.mavenDeployer {
+        name = 'JMLauncher'
+        repository(url: "http://xxx.xxx.xxx.xx:8080/content/repositories/releases") {
+            authentication(userName: "xxxx", password: "xxxx")
+        }
+        snapshotRepository(url: "http://xxx.xxx.xxx.xx:8080/content/repositories/snapshots") {
+            authentication(userName: "xxxx", password: "xxxx")
+        }
+        pom.version = "0.0.1"
+        pom.artifactId = "sdk"
+        pom.groupId = "com.jm.android.jmlauncher"
+        pom.name = "JMLauncher"
+        pom.packaging = 'aar'
+    }
+
+}
+
